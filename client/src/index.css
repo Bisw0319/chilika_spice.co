@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-crimson: #7E191B;
+    --color-turmeric: #E68A00;
+    --color-green: #1E4D2B;
+    --color-cream: #FBF8F2;
+    --color-brown: #2C1810;
+    --color-gold: #C99700;
+  }
+
+  body {
+    background-color: #FBF8F2;
+    color: #2C1810;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Custom hide scrollbar while preserving touch & wheel scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth horizontal snap carousel */
+.carousel-snap-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel-snap-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Subtle image shimmer placeholder */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0e6d8 25%, #f9f4ec 50%, #f0e6d8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Indian Veg Symbol */
+.veg-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #16A34A;
+  border-radius: 2px;
+  padding: 1px;
+}
+.veg-badge::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background-color: #16A34A;
+  border-radius: 50%;
+}
+
+/* Spice Preloader Animations */
+@keyframes spiceEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.82);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes spiceFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes textReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes progressSweep {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-spice-in {
+  animation: spiceEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-spice-float {
+  animation: spiceFloat 3s ease-in-out infinite;
+}
+
+.animate-text-reveal {
+  animation: textReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-progress-sweep {
+  animation: progressSweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Animated Search Box */
+@keyframes searchBoxSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-search-box {
+  animation: searchBoxSlideDown 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Continuous Marquee Auto-Scroll (Right to Left) for Mobile */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-smooth {
+  display: inline-flex;
+  width: max-content;
+  animation: marqueeScroll 16s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-smooth:hover {
+  animation-play-state: paused;
+}

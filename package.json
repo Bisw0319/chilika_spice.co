@@ -1,0 +1,14 @@
+{
+  "name": "chilika-spices",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chilika Spices - Full MERN Stack E-Commerce Platform",
+  "scripts": {
+    "dev": "node start-dev.js",
+    "start": "node start-dev.js",
+    "server": "npm --prefix server start",
+    "client": "npm --prefix client dev",
+    "build": "npm --prefix client build"
+  }
+}
