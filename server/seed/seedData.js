@@ -15,12 +15,8 @@ export const seedDatabase = async () => {
   try {
     console.log('[Seed] Checking if database needs initial seeding...');
 
-    // 1. Admin & Customer accounts (with stable deterministic ObjectIds across in-memory DB restarts)
+    // 1. Admin account initialization (no demo customer accounts)
     const FIXED_ADMIN_ID = new mongoose.Types.ObjectId('65a000000000000000000001');
-    const FIXED_PRIYA_ID = new mongoose.Types.ObjectId('65a000000000000000000002');
-    const FIXED_FREELIXIR_ID = new mongoose.Types.ObjectId('65a000000000000000000003');
-    const FIXED_BISWAJIT_ID = new mongoose.Types.ObjectId('65a000000000000000000004');
-
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@chilikaspices.com';
     let admin = await User.findOne({ email: adminEmail.toLowerCase() });
     if (!admin) {
@@ -32,65 +28,13 @@ export const seedDatabase = async () => {
         role: 'admin',
         phone: '+91 98765 43210'
       });
-      console.log('[Seed] Admin account created:', adminEmail);
+      console.log('[Seed] Admin account ready:', adminEmail);
     }
 
-    const testCustomerEmail = 'priya.sharma@example.com';
-    let customer = await User.findOne({ email: testCustomerEmail });
-    if (!customer) {
-      customer = await User.create({
-        _id: FIXED_PRIYA_ID,
-        name: 'Priya Sharma',
-        email: testCustomerEmail,
-        password: 'Customer@123',
-        role: 'customer',
-        phone: '+91 98123 45678',
-        isEmailVerified: true,
-        addresses: [
-          {
-            fullName: 'Priya Sharma',
-            phone: '+91 98123 45678',
-            street: 'Flat 402, Niladri Vihar, Near Infocity',
-            city: 'Bhubaneswar',
-            state: 'Odisha',
-            pincode: '751024',
-            isDefault: true
-          }
-        ]
-      });
-      console.log('[Seed] Test customer account created:', testCustomerEmail);
-    }
-
-    // Seed freelixir.b@gmail.com for live verification & password reset testing
-    const freelixirEmail = 'freelixir.b@gmail.com';
-    let freelixirUser = await User.findOne({ email: freelixirEmail });
-    if (!freelixirUser) {
-      freelixirUser = await User.create({
-        _id: FIXED_FREELIXIR_ID,
-        name: 'Freelixir Test',
-        email: freelixirEmail,
-        password: 'Customer@123',
-        role: 'customer',
-        phone: '+91 98765 00000',
-        isEmailVerified: true
-      });
-      console.log('[Seed] Freelixir test customer account created:', freelixirEmail);
-    }
-
-    // Seed biswajitbaral193@gmail.com for live verification & password reset testing
-    const biswajitEmail = 'biswajitbaral193@gmail.com';
-    let biswajitUser = await User.findOne({ email: biswajitEmail });
-    if (!biswajitUser) {
-      biswajitUser = await User.create({
-        _id: FIXED_BISWAJIT_ID,
-        name: 'Biswajit Baral',
-        email: biswajitEmail,
-        password: 'Customer@123',
-        role: 'customer',
-        phone: '+91 98765 11111',
-        isEmailVerified: true
-      });
-      console.log('[Seed] Biswajit test customer account created:', biswajitEmail);
+    // Purge any lingering demo customer accounts
+    const purgedUsers = await User.deleteMany({ role: { $ne: 'admin' } });
+    if (purgedUsers.deletedCount > 0) {
+      console.log(`[Seed] Purged ${purgedUsers.deletedCount} demo customer accounts.`);
     }
 
     // 2. Categories
@@ -653,49 +597,12 @@ export const seedDatabase = async () => {
     console.log('[Seed] Synchronized multiple product images.');
     seededProducts = await Product.find();
 
-    // 4. Seed Reviews
-    const reviewCount = await Review.countDocuments();
-    if (reviewCount === 0 && seededProducts.length > 0) {
-      await Review.insertMany([
-        {
-          product: seededProducts[0]._id,
-          userName: 'Debashis Mohapatra',
-          userEmail: 'debashis@example.com',
-          rating: 5,
-          comment: 'The aroma of this Kandhamal turmeric reminds me of my grandmother pounding fresh haldi in our ancestral village. No artificial colour, just pure golden magic.',
-          isVerifiedPurchase: true,
-          isApproved: true
-        },
-        {
-          product: seededProducts[2]._id,
-          userName: 'Sunita Nayak',
-          userEmail: 'sunita.n@example.com',
-          rating: 5,
-          comment: 'The Royal Garam Masala elevates our Sunday mutton curry completely. Just half a teaspoon fills the entire house with heavenly fragrance.',
-          isVerifiedPurchase: true,
-          isApproved: true
-        },
-        {
-          product: seededProducts[6]._id,
-          userName: 'Rakesh Jena',
-          userEmail: 'rakesh.jena@example.com',
-          rating: 5,
-          comment: 'Authentic Chilika Machha Besara taste! Mustard balance is spot on without any bitterness. Highly recommended for authentic Odisha seafood lovers.',
-          isVerifiedPurchase: true,
-          isApproved: true
-        },
-        {
-          product: seededProducts[1]._id,
-          userName: 'Ananya Pattnaik',
-          userEmail: 'ananya.p@example.com',
-          rating: 4,
-          comment: 'Very fresh red chilli powder. Natural fiery warmth and beautiful deep red hue without any added colours.',
-          isVerifiedPurchase: true,
-          isApproved: true
-        }
-      ]);
-      console.log('[Seed] Seeded customer reviews.');
+    // 4. Purge all demo/mock reviews & reset product review counts
+    const purgedReviews = await Review.deleteMany({});
+    if (purgedReviews.deletedCount > 0) {
+      console.log(`[Seed] Purged ${purgedReviews.deletedCount} demo reviews.`);
     }
+    await Product.updateMany({}, { $set: { numReviews: 0 } });
 
     // 5. Seed Coupons
     const couponCount = await Coupon.countDocuments();
@@ -732,90 +639,10 @@ export const seedDatabase = async () => {
       console.log('[Seed] Seeded discount coupons.');
     }
 
-    // 6. Seed Sample Trackable Orders
-    const orderCount = await Order.countDocuments();
-    if (orderCount === 0 && seededProducts.length > 0) {
-      const now = new Date();
-      const past2Days = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
-      const past1Day = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
-
-      await Order.create({
-        orderId: 'CHL-2026-000001',
-        user: customer ? customer._id : undefined,
-        guestUser: {
-          name: 'Priya Sharma',
-          email: 'priya.sharma@example.com',
-          phone: '+91 98123 45678'
-        },
-        items: [
-          {
-            product: seededProducts[0]._id,
-            productName: seededProducts[0].name,
-            image: seededProducts[0].productImages[0],
-            size: '250g',
-            price: 145,
-            quantity: 2,
-            subtotal: 290
-          },
-          {
-            product: seededProducts[2]._id,
-            productName: seededProducts[2].name,
-            image: seededProducts[2].productImages[0],
-            size: '100g',
-            price: 110,
-            quantity: 1,
-            subtotal: 110
-          }
-        ],
-        shippingAddress: {
-          fullName: 'Priya Sharma',
-          phone: '+91 98123 45678',
-          email: 'priya.sharma@example.com',
-          street: 'Flat 402, Niladri Vihar, Near Infocity',
-          city: 'Bhubaneswar',
-          state: 'Odisha',
-          pincode: '751024',
-          country: 'India'
-        },
-        paymentMethod: 'cod',
-        paymentStatus: 'pending',
-        orderStatus: 'Shipped',
-        statusTimeline: [
-          {
-            status: 'Order Placed',
-            message: 'Order received and verified.',
-            timestamp: past2Days
-          },
-          {
-            status: 'Confirmed',
-            message: 'Fresh spices batch allocated and confirmed.',
-            timestamp: new Date(past2Days.getTime() + 4 * 60 * 60 * 1000)
-          },
-          {
-            status: 'Processing',
-            message: 'Fresh batch weighed and vacuum packed with seal.',
-            timestamp: new Date(past2Days.getTime() + 12 * 60 * 60 * 1000)
-          },
-          {
-            status: 'Packed',
-            message: 'Securely packed in eco-friendly protective outer box.',
-            timestamp: past1Day
-          },
-          {
-            status: 'Shipped',
-            message: 'Handed over to express courier partner in Bhubaneswar Hub.',
-            timestamp: new Date(past1Day.getTime() + 6 * 60 * 60 * 1000)
-          }
-        ],
-        subtotal: 400,
-        shippingCost: 49,
-        discount: 0,
-        total: 449,
-        trackingNumber: 'ODISHA-EXP-789123',
-        expectedDeliveryDate: new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000)
-      });
-
-      console.log('[Seed] Seeded sample trackable order: CHL-2026-000001');
+    // 6. Purge all demo orders so store starts completely fresh at 0 orders
+    const purgedOrders = await Order.deleteMany({});
+    if (purgedOrders.deletedCount > 0) {
+      console.log(`[Seed] Purged ${purgedOrders.deletedCount} demo orders.`);
     }
 
     // 7. Seed Homepage Content

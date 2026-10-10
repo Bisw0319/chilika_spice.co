@@ -163,8 +163,15 @@ export const AdminOrdersPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filtered.map((ord) => (
-                <tr key={ord._id} className="hover:bg-gray-50/80">
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="py-12 text-center text-gray-400 text-xs">
+                    No customer orders yet. Incoming customer orders will appear here in real time.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((ord) => (
+                  <tr key={ord._id} className="hover:bg-gray-50/80">
                   <td className="py-3 px-4">
                     <span className="font-mono font-bold text-spice-crimson block">{ord.orderId}</span>
                     <span className="text-[10px] text-gray-400">
@@ -275,7 +282,7 @@ export const AdminOrdersPage = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

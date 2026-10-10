@@ -66,8 +66,15 @@ export const AdminReviewsPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {reviews.map((r) => (
-                <tr key={r._id} className="hover:bg-gray-50/80">
+              {reviews.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="py-12 text-center text-gray-400 text-xs">
+                    No customer reviews yet. Reviews submitted by buyers will appear here for moderation.
+                  </td>
+                </tr>
+              ) : (
+                reviews.map((r) => (
+                  <tr key={r._id} className="hover:bg-gray-50/80">
                   <td className="py-3 px-4 font-bold text-gray-900">
                     <p>{r.userName}</p>
                     <span className="text-[10px] text-gray-400 font-normal">{r.userEmail || 'Customer'}</span>
@@ -118,7 +125,7 @@ export const AdminReviewsPage = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

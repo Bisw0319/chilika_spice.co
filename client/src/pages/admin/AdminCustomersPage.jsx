@@ -45,41 +45,49 @@ export const AdminCustomersPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {customers.map((c) => (
-                <tr key={c._id} className="hover:bg-gray-50/80">
-                  <td className="py-3 px-4 font-bold text-gray-900 flex items-center space-x-2">
-                    <div className="w-7 h-7 rounded-full bg-spice-cream text-spice-crimson font-bold flex items-center justify-center border border-spice-tan">
-                      {c.name?.charAt(0) || 'U'}
-                    </div>
-                    <span>{c.name}</span>
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">{c.email}</td>
-                  <td className="py-3 px-4 text-gray-600">{c.phone || '—'}</td>
-                  <td className="py-3 px-4 text-gray-600">
-                    {c.addresses && c.addresses.length > 0 ? (
-                      <span className="truncate max-w-[160px] block">
-                        {c.addresses[0].city}, {c.addresses[0].pincode}
-                      </span>
-                    ) : (
-                      '—'
-                    )}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="bg-spice-sand text-spice-brown px-2 py-0.5 rounded-full font-bold">
-                      {c.orderCount || 0} orders
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedCustomer(c)}
-                      className="px-3 py-1 bg-gray-100 hover:bg-spice-sand text-spice-brown rounded-lg font-bold"
-                    >
-                      View
-                    </button>
+              {customers.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="py-8 text-center text-gray-400 text-xs">
+                    No registered customers yet. Real user accounts will appear here.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                customers.map((c) => (
+                  <tr key={c._id} className="hover:bg-gray-50/80">
+                    <td className="py-3 px-4 font-bold text-gray-900 flex items-center space-x-2">
+                      <div className="w-7 h-7 rounded-full bg-spice-cream text-spice-crimson font-bold flex items-center justify-center border border-spice-tan">
+                        {c.name?.charAt(0) || 'U'}
+                      </div>
+                      <span>{c.name}</span>
+                    </td>
+                    <td className="py-3 px-4 text-gray-600">{c.email}</td>
+                    <td className="py-3 px-4 text-gray-600">{c.phone || '—'}</td>
+                    <td className="py-3 px-4 text-gray-600">
+                      {c.addresses && c.addresses.length > 0 ? (
+                        <span className="truncate max-w-[160px] block">
+                          {c.addresses[0].city}, {c.addresses[0].pincode}
+                        </span>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="bg-spice-sand text-spice-brown px-2 py-0.5 rounded-full font-bold">
+                        {c.orderCount || 0} orders
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCustomer(c)}
+                        className="px-3 py-1 bg-gray-100 hover:bg-spice-sand text-spice-brown rounded-lg font-bold"
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

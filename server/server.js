@@ -160,6 +160,7 @@ const startServer = async () => {
       console.log(`  Tagline: "From village to your kitchen"`);
       console.log(`  Admin Email: ${process.env.ADMIN_EMAIL || 'admin@chilikaspices.com'}`);
       console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`  Demo Mode: DISABLED (Production Clean State)`);
       console.log(`=======================================================`);
     });
   } catch (error) {

@@ -112,20 +112,6 @@ export const LoginPage = () => {
               Create an account
             </Link>
           </p>
-
-          <div className="p-2.5 bg-spice-sand/50 rounded-xl text-[11px] text-spice-brown/70 flex items-center justify-between">
-            <span>Demo Customer:</span>
-            <button
-              type="button"
-              onClick={() => {
-                setEmail('priya.sharma@example.com');
-                setPassword('Customer@123');
-              }}
-              className="text-spice-crimson font-bold hover:underline"
-            >
-              Fill Demo Credentials
-            </button>
-          </div>
         </div>
       </div>
     </div>

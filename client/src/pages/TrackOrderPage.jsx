@@ -149,21 +149,6 @@ export const TrackOrderPage = () => {
               </button>
             </div>
           </form>
-
-          {/* Quick Demo Hint */}
-          <div className="mt-4 pt-3 border-t border-spice-tan/40 flex flex-wrap items-center justify-between text-xs text-spice-brown/70">
-            <span>Try sample demo tracking:</span>
-            <button
-              type="button"
-              onClick={() => {
-                setOrderId('CHL-2026-000001');
-                fetchTrackOrder('CHL-2026-000001', '');
-              }}
-              className="text-spice-crimson font-bold hover:underline font-mono"
-            >
-              CHL-2026-000001
-            </button>
-          </div>
         </div>
 
         {error && (

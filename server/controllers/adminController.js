@@ -31,16 +31,36 @@ export const getDashboardStats = async (req, res) => {
 
     const revenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].total : 0;
 
-    // Monthly / recent sales mock aggregated data for charts
-    const salesChart = [
-      { name: 'Mon', sales: 4200, orders: 12 },
-      { name: 'Tue', sales: 6800, orders: 19 },
-      { name: 'Wed', sales: 5500, orders: 16 },
-      { name: 'Thu', sales: 8900, orders: 24 },
-      { name: 'Fri', sales: 11400, orders: 31 },
-      { name: 'Sat', sales: 15600, orders: 42 },
-      { name: 'Sun', sales: 13200, orders: 38 }
-    ];
+    // Real 7-day dynamic sales aggregation from Order collection
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const salesChart = [];
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    const pastOrders = await Order.find({
+      createdAt: { $gte: sevenDaysAgo },
+      orderStatus: { $ne: 'Cancelled' }
+    });
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dayStart = new Date(d);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(d);
+      dayEnd.setHours(23, 59, 59, 999);
+
+      const dayOrders = pastOrders.filter(
+        (o) => o.createdAt && o.createdAt >= dayStart && o.createdAt <= dayEnd
+      );
+      const daySales = dayOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+      salesChart.push({
+        name: days[d.getDay()],
+        sales: daySales,
+        orders: dayOrders.length
+      });
+    }
 
     res.json({
       success: true,

@@ -82,7 +82,7 @@ export const AdminDashboardPage = () => {
           <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Total Orders</span>
           <div className="flex items-baseline space-x-2">
             <span className="font-serif font-bold text-2xl text-gray-900">{totalOrders}</span>
-            <span className="text-[10px] text-green-600 font-semibold">+100%</span>
+            <span className="text-[10px] text-gray-400 font-semibold">All-time</span>
           </div>
         </div>
 
@@ -144,18 +144,18 @@ export const AdminDashboardPage = () => {
               <p className="text-xs text-gray-500">Daily gross orders and sales</p>
             </div>
             <span className="text-xs font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-full border border-green-200">
-              Avg ₹8,700/day
+              Avg ₹{Math.round((salesChart.reduce((sum, d) => sum + (d.sales || 0), 0)) / (salesChart.length || 7)).toLocaleString()}/day
             </span>
           </div>
 
           <div className="pt-4 flex items-end justify-between h-48 space-x-3 px-2">
             {salesChart.map((day, i) => {
-              const maxVal = 16000;
-              const heightPct = Math.round((day.sales / maxVal) * 100);
+              const maxVal = Math.max(...salesChart.map((d) => d.sales || 0), 100);
+              const heightPct = Math.round(((day.sales || 0) / maxVal) * 100);
               return (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
                   <span className="text-[10px] text-gray-400 group-hover:text-spice-crimson font-bold transition-colors">
-                    ₹{day.sales}
+                    ₹{day.sales || 0}
                   </span>
                   <div className="w-full bg-spice-cream rounded-t-xl overflow-hidden h-36 flex items-end">
                     <div
