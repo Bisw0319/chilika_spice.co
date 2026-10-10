@@ -50,9 +50,6 @@ export const ForgotPasswordPage = () => {
       const res = await api.forgotPassword(cleanEmail);
       if (res.success) {
         setSuccessMsg(res.message);
-        if (res.debugOtp) {
-          setOtp(res.debugOtp);
-        }
         setStep(2);
         startCooldown();
       }
@@ -73,9 +70,6 @@ export const ForgotPasswordPage = () => {
       const res = await api.forgotPassword(cleanEmail);
       if (res.success) {
         setSuccessMsg(res.message || 'A fresh verification code was sent to your mailbox. Please check your latest email.');
-        if (res.debugOtp) {
-          setOtp(res.debugOtp);
-        }
         startCooldown();
       }
     } catch (err) {

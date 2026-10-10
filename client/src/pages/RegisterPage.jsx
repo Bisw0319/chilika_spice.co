@@ -77,9 +77,6 @@ export const RegisterPage = () => {
       const res = await api.sendVerificationOTP(formData.email.trim());
       if (res.success) {
         setInfoMsg(res.message);
-        if (res.debugOtp) {
-          setOtp(res.debugOtp);
-        }
         setStep(2);
         startCooldown();
       }
@@ -99,9 +96,6 @@ export const RegisterPage = () => {
       const res = await api.sendVerificationOTP(formData.email.trim());
       if (res.success) {
         setInfoMsg(res.message || 'A new 6-digit code was sent to your email.');
-        if (res.debugOtp) {
-          setOtp(res.debugOtp);
-        }
         startCooldown();
       }
     } catch (err) {

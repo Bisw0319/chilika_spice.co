@@ -41,14 +41,10 @@ export const sendVerificationOTP = async (req, res) => {
 
     // Send email (via real SMTP or test transporter)
     const emailResult = await sendOTPEmail(cleanEmail, otp, 'verification');
-    const isRealEmailConfigured = !!(process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS));
 
     res.json({
       success: true,
-      message: isRealEmailConfigured
-        ? `A 6-digit verification code has been dispatched to your mailbox (${cleanEmail}). Please check your inbox and spam folder.`
-        : `Verification code: [ ${otp} ] (Email service not configured yet in Vercel). Enter this code to verify!`,
-      debugOtp: !isRealEmailConfigured ? otp : undefined
+      message: `A 6-digit verification code has been dispatched to your mailbox (${cleanEmail}). Please check your inbox and spam folder.`
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -147,14 +143,10 @@ export const forgotPassword = async (req, res) => {
 
     const emailResult = await sendOTPEmail(cleanEmail, otp, 'password_reset');
     console.log(`[PASSWORD RESET OTP GENERATED] To: ${cleanEmail} | OTP: ${otp}`);
-    const isRealEmailConfigured = !!(process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS));
 
     res.json({
       success: true,
-      message: isRealEmailConfigured
-        ? `A password reset code has been dispatched to your mailbox (${cleanEmail}). Please check your inbox.`
-        : `Reset Code: [ ${otp} ] (Email service not configured yet in Vercel). Enter this code to reset your password!`,
-      debugOtp: !isRealEmailConfigured ? otp : undefined
+      message: `A password reset code has been dispatched to your mailbox (${cleanEmail}). Please check your inbox and spam folder.`
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

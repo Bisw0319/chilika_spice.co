@@ -16,13 +16,16 @@ export const generateOTP = () => {
 
 // Create Nodemailer Transporter for Gmail / SMTP
 const createNodemailerTransporter = async () => {
-  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    if (process.env.EMAIL_SERVICE === 'gmail' || process.env.EMAIL_USER.includes('@gmail.com')) {
+  const emailUser = process.env.EMAIL_USER?.trim();
+  const emailPass = process.env.EMAIL_PASS?.replace(/\s+/g, '')?.replace(/["']/g, '')?.trim();
+
+  if (emailUser && emailPass) {
+    if (process.env.EMAIL_SERVICE === 'gmail' || emailUser.includes('@gmail.com')) {
       return nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
+          user: emailUser,
+          pass: emailPass
         }
       });
     }
@@ -32,8 +35,8 @@ const createNodemailerTransporter = async () => {
       port: Number(process.env.EMAIL_PORT) || 587,
       secure: process.env.EMAIL_SECURE === 'true',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: emailUser,
+        pass: emailPass
       }
     });
   }
