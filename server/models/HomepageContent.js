@@ -249,11 +249,11 @@ const homepageContentSchema = new mongoose.Schema({
   },
   whatsappNumber: {
     type: String,
-    default: "+91 98765 43210"
+    default: "+91 96686 59633"
   },
 
   // Contact Info & Footer
-  contactPhone: { type: String, default: "+91 98765 43210" },
+  contactPhone: { type: String, default: "+91 96686 59633" },
   contactEmail: { type: String, default: "care@chilikaspices.com" },
   contactAddress: { type: String, default: "Chilika Spice Co., Old Town, Khordha / Puri District, Odisha, India" },
   footerAboutText: {

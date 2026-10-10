@@ -11,7 +11,7 @@ export const ContactPage = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  const phone = content?.contactPhone || "+91 98765 43210";
+  const phone = content?.contactPhone || "+91 96686 59633";
   const email = content?.contactEmail || "care@chilikaspices.com";
   const address = content?.contactAddress || "Chilika Spice Co., Old Town, Khordha / Puri District, Odisha, India";
 

@@ -40,7 +40,7 @@ export const getHomepageContent = async (req, res) => {
           },
           {
             question: "How can I contact Chilika Spices?",
-            answer: "You can reach us at care@chilikaspices.com or via WhatsApp/Phone at +91 98765 43210 from Monday to Saturday, 9 AM to 7 PM."
+            answer: "You can reach us at care@chilikaspices.com or via WhatsApp/Phone at +91 96686 59633 from Monday to Saturday, 9 AM to 7 PM."
           },
           {
             question: "What is your return policy?",

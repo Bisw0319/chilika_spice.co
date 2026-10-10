@@ -51,16 +51,16 @@ export const AdminLoginPage = () => {
 
         <form onSubmit={handleAdminSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-spice-brown mb-1.5">Admin Email</label>
+            <label className="block text-xs font-bold text-spice-brown mb-1.5">Admin Email or Username</label>
             <div className="relative">
               <Mail className="w-4 h-4 text-spice-brown/40 absolute left-3.5 top-3" />
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
-                autoComplete="email"
+                placeholder="chilikadmin or admin@chilikaspices.com"
+                autoComplete="username"
                 className="w-full bg-spice-cream border border-spice-tan rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-spice-brown focus:outline-none focus:border-spice-crimson"
               />
             </div>

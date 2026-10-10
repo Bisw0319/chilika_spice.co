@@ -7,7 +7,7 @@ import { InstagramIcon, YoutubeIcon, FacebookIcon } from './SocialIcons';
 export const Footer = () => {
   const { content } = useContent();
 
-  const phone = content?.contactPhone || "+91 98765 43210";
+  const phone = content?.contactPhone || "+91 96686 59633";
   const email = content?.contactEmail || "care@chilikaspices.com";
   const address = content?.contactAddress || "Chilika Spice Co., Old Town, Khordha / Puri District, Odisha, India";
   const aboutText = content?.footerAboutText || "Authentic spices inspired by the flavours, traditions and kitchens of Odisha. Sourced directly from village growers and stone-ground to preserve every ounce of pure aroma.";

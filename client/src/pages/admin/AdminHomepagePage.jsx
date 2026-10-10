@@ -1716,7 +1716,7 @@ export const AdminHomepagePage = () => {
                     type="text"
                     value={content.contactPhone || ''}
                     onChange={(e) => setContent({ ...content, contactPhone: e.target.value })}
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 96686 59633"
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2 text-gray-900"
                   />
                 </div>

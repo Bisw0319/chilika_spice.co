@@ -23,7 +23,7 @@ export const FaqSection = ({ faqs = [] }) => {
     },
     {
       question: "How can I contact Chilika Spices?",
-      answer: "Reach out to our customer care at care@chilikaspices.com or call/WhatsApp +91 98765 43210 from Monday to Saturday, 9 AM to 7 PM."
+      answer: "Reach out to our customer care at care@chilikaspices.com or call/WhatsApp +91 96686 59633 from Monday to Saturday, 9 AM to 7 PM."
     },
     {
       question: "What is your return policy?",

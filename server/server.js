@@ -4,7 +4,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { connectDB } from './config/db.js';
-import { seedDatabase } from './seed/seedData.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';

@@ -1,8 +1,29 @@
 import mongoose from 'mongoose';
-import { seedDatabase } from '../seed/seedData.js';
+import { User } from '../models/User.js';
 
 let mongodInstance = null;
-let isSeeded = false;
+
+// Safe admin account verification - never deletes customers or resets data
+const ensureAdminAccount = async () => {
+  try {
+    const adminCount = await User.countDocuments({ role: 'admin' });
+    if (adminCount === 0) {
+      const adminEmail = (process.env.ADMIN_EMAIL || 'admin@chilikaspices.com').toLowerCase().trim();
+      const adminPassword = process.env.ADMIN_PASSWORD || '8112087645';
+      await User.create({
+        name: 'Chilika Admin',
+        email: adminEmail,
+        password: adminPassword,
+        role: 'admin',
+        phone: '+91 96686 59633',
+        isEmailVerified: true
+      });
+      console.log('[Database] Verified/created default admin account.');
+    }
+  } catch (err) {
+    console.warn('[Database] Admin verification note:', err.message);
+  }
+};
 
 export const connectDB = async () => {
   if (mongoose.connection.readyState >= 1) {
@@ -18,14 +39,8 @@ export const connectDB = async () => {
     });
     console.log(`[Database] Connected successfully to MongoDB: ${mongoose.connection.host}`);
 
-    if (!isSeeded) {
-      isSeeded = true;
-      try {
-        await seedDatabase();
-      } catch (seedErr) {
-        console.warn('[Database] Seed initialization notice:', seedErr.message);
-      }
-    }
+    // Ensure admin user exists (completely non-destructive, never touches customers or products)
+    await ensureAdminAccount();
   } catch (primaryError) {
     console.warn(`[Database] Primary MongoDB connection failed (${primaryError.message}).`);
 
@@ -43,10 +58,7 @@ export const connectDB = async () => {
       
       await mongoose.connect(inMemoryUri);
       console.log(`[Database] Connected successfully to In-Memory MongoDB at: ${inMemoryUri}`);
-      if (!isSeeded) {
-        isSeeded = true;
-        await seedDatabase();
-      }
+      await ensureAdminAccount();
     } catch (memError) {
       console.error('[Database] Fatal: Failed to initialize in-memory MongoDB server:', memError);
       process.exit(1);

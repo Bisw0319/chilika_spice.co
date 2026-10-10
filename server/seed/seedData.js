@@ -24,17 +24,11 @@ export const seedDatabase = async () => {
         _id: FIXED_ADMIN_ID,
         name: 'Chilika Admin',
         email: adminEmail.toLowerCase(),
-        password: process.env.ADMIN_PASSWORD || 'Admin@Chilika2026',
+        password: process.env.ADMIN_PASSWORD || '8112087645',
         role: 'admin',
-        phone: '+91 98765 43210'
+        phone: '+91 96686 59633'
       });
       console.log('[Seed] Admin account ready:', adminEmail);
-    }
-
-    // Purge any lingering demo customer accounts
-    const purgedUsers = await User.deleteMany({ role: { $ne: 'admin' } });
-    if (purgedUsers.deletedCount > 0) {
-      console.log(`[Seed] Purged ${purgedUsers.deletedCount} demo customer accounts.`);
     }
 
     // 2. Categories
@@ -481,130 +475,15 @@ export const seedDatabase = async () => {
         }
       ];
 
-      for (const pDef of defaultProductDefs) {
-        await Product.findOneAndUpdate(
-          { slug: pDef.slug },
-          { $set: pDef },
-          { upsert: true, new: true }
-        );
-        console.log(`[Seed] Synced product: ${pDef.name}`);
+      const existingProductCount = await Product.countDocuments();
+      if (existingProductCount === 0) {
+        await Product.insertMany(defaultProductDefs);
+        console.log(`[Seed] Seeded ${defaultProductDefs.length} initial products.`);
+      } else {
+        console.log(`[Seed] Products already present (${existingProductCount} existing). Preserving store catalog.`);
       }
-      await Product.deleteOne({ slug: 'aromatic-roasted-cumin-powder-bhuna-jeera' });
-      let seededProducts = await Product.find();
 
-    // Always ensure products have rich multi-image gallery
-    await Product.updateOne(
-      { slug: 'royal-aromatic-garam-masala' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/garam-masala-wa.jpg',
-            '/images/products/garam-masala.jpg',
-            '/images/products/garam-masala-pack.jpg',
-            '/images/products/garam-masala-whole.jpg',
-            '/images/products/garam-masala-bowl.jpg',
-            '/images/products/garam-masala-curry.jpg',
-            '/images/products/garam-masala-craft.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-
-    await Product.updateOne(
-      { slug: 'pure-kandhamal-turmeric-powder' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/haldi-powder-wa.jpg',
-            '/images/products/turmeric.jpg',
-            '/images/products/turmeric-pack.jpg',
-            '/images/products/turmeric-roots.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-
-    await Product.updateOne(
-      { slug: 'fiery-odia-red-chilli-powder' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/chilli-powder-wa.jpg',
-            '/images/products/chilli.jpg',
-            '/images/products/chilli-pack.jpg',
-            '/images/products/chilli-whole.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-
-    await Product.updateOne(
-      { slug: 'authentic-odisha-panch-phoron' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/panch-phoron.jpg',
-            '/images/products/panch-phoron-pack.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-
-    await Product.updateOne(
-      { slug: 'aromatic-roasted-cumin-powder-bhuna-jeera' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/jeera-powder-wa.jpg',
-            '/images/products/cumin.jpg',
-            '/images/products/cumin-pack.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-
-    await Product.updateOne(
-      { slug: 'freshly-ground-coriander-powder-dhania' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/dhania-powder-wa.jpg',
-            '/images/products/coriander.jpg',
-            '/images/products/coriander-pack.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-
-    await Product.updateOne(
-      { slug: 'chilika-coastal-fish-curry-blend-machha-besara' },
-      {
-        $set: {
-          productImages: [
-            '/images/products/machha-besara.jpg',
-            '/images/products/machha-besara-pack.jpg'
-          ]
-        },
-        $unset: { videoUrl: '', videoTitle: '' }
-      }
-    );
-    console.log('[Seed] Synchronized multiple product images.');
-    seededProducts = await Product.find();
-
-    // 4. Purge all demo/mock reviews & reset product review counts
-    const purgedReviews = await Review.deleteMany({});
-    if (purgedReviews.deletedCount > 0) {
-      console.log(`[Seed] Purged ${purgedReviews.deletedCount} demo reviews.`);
-    }
-    await Product.updateMany({}, { $set: { numReviews: 0 } });
-
-    // 5. Seed Coupons
+    // 4. Seed Coupons (only if empty)
     const couponCount = await Coupon.countDocuments();
     if (couponCount === 0) {
       await Coupon.insertMany([
@@ -637,12 +516,6 @@ export const seedDatabase = async () => {
         }
       ]);
       console.log('[Seed] Seeded discount coupons.');
-    }
-
-    // 6. Purge all demo orders so store starts completely fresh at 0 orders
-    const purgedOrders = await Order.deleteMany({});
-    if (purgedOrders.deletedCount > 0) {
-      console.log(`[Seed] Purged ${purgedOrders.deletedCount} demo orders.`);
     }
 
     // 7. Seed Homepage Content
@@ -684,7 +557,7 @@ export const seedDatabase = async () => {
           },
           {
             question: "How can I contact Chilika Spices?",
-            answer: "You can reach us at care@chilikaspices.com or via WhatsApp/Phone at +91 98765 43210 from Monday to Saturday, 9 AM to 7 PM."
+            answer: "You can reach us at care@chilikaspices.com or via WhatsApp/Phone at +91 96686 59633 from Monday to Saturday, 9 AM to 7 PM."
           },
           {
             question: "What is your return policy?",
