@@ -7,6 +7,8 @@ export const apiRequest = async (endpoint, options = {}) => {
   
   const headers = {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };
@@ -14,9 +16,11 @@ export const apiRequest = async (endpoint, options = {}) => {
   let response;
   try {
     response = await fetch(`${API_BASE}${endpoint}`, {
+      cache: 'no-store',
       ...options,
       headers,
     });
+
   } catch (netErr) {
     throw new Error('Unable to connect to server. Please ensure the backend server is running.');
   }
@@ -147,7 +151,7 @@ export const api = {
 
     let response;
     try {
-      response = await fetch('/api/upload', {
+      response = await fetch(`${API_BASE}/upload`, {
         method: 'POST',
         headers,
         body: formData
