@@ -299,18 +299,20 @@ export const createProduct = async (req, res) => {
 // @route   PUT /api/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
+    const updateData = { ...req.body };
+    if (updateData.name) {
+      updateData.slug = slugify(updateData.name);
+    }
+
+    const updated = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updated) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
-
-    if (req.body.name && req.body.name !== product.name) {
-      product.name = req.body.name;
-      product.slug = slugify(req.body.name);
-    }
-
-    Object.assign(product, req.body);
-    const updated = await product.save();
 
     await logAudit(req, {
       action: 'PRODUCT_UPDATED',

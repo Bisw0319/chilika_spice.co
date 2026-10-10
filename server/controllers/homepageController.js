@@ -28,7 +28,7 @@ export const getHomepageContent = async (req, res) => {
           },
           {
             question: "How can I track my order?",
-            answer: "Use our dedicated Track Order page by entering your unique Order ID (e.g. CHL-2026-000001) and phone number to see live status updates."
+            answer: "Use our dedicated Track Order page by entering your unique Order ID and phone number to see live status updates."
           },
           {
             question: "What payment methods are available?",
@@ -46,38 +46,8 @@ export const getHomepageContent = async (req, res) => {
             question: "What is your return policy?",
             answer: "If your spice package arrived damaged or incorrect, contact us within 48 hours with a photo for an immediate replacement or full refund."
           }
-        ]
-      });
-    } else {
-      let needsSave = false;
-      if (!content.newProductPromoBanner) {
-        content.newProductPromoBanner = {
-          tag: "NEW PRODUCT LAUNCH",
-          title: "Chilika Coastal Fish Curry Blend (Machha Besara)",
-          subtitle: "Authentic coastal mustard and cumin tempering for timeless fish curries and village delicacies.",
-          image: "/images/products/machha-besara.jpg",
-          buttonText: "Shop New Arrival",
-          buttonLink: "/shop?sort=newest",
-          priceText: "Special Launch: ₹85",
-          isActive: true
-        };
-        needsSave = true;
-      }
-      if (!content.bestSellerPromoBanner) {
-        content.bestSellerPromoBanner = {
-          tag: "TOP BEST SELLER",
-          title: "Royal Aromatic Garam Masala",
-          subtitle: "Over 1,200+ households love our heirloom 12-spice recipe hand-roasted on iron skillets.",
-          image: "/images/products/garam-masala-bowl.jpg",
-          buttonText: "Explore Best Seller",
-          buttonLink: "/shop?sort=popular",
-          priceText: "Customer Favourite: ₹95",
-          isActive: true
-        };
-        needsSave = true;
-      }
-      if (!content.whyChilikaItems || content.whyChilikaItems.length === 0) {
-        content.whyChilikaItems = [
+        ],
+        whyChilikaItems: [
           {
             title: "Traditional Flavour",
             description: "Slow-pounded and stone-ground at low temperatures to ensure vital spice oils and signature pungency never evaporate."
@@ -94,114 +64,13 @@ export const getHomepageContent = async (req, res) => {
             title: "From Village To Kitchen",
             description: "Direct relationships with farming communities around Chilika and Odisha hinterlands, packed with care and hygiene."
           }
-        ];
-        needsSave = true;
-      }
-      if (!content.founderImage) {
-        content.founderImage = "/images/brand/founder.jpg";
-        needsSave = true;
-      }
-      if (!content.founderName) {
-        content.founderName = "Biswajit Baral";
-        needsSave = true;
-      }
-      if (!content.founderTitle) {
-        content.founderTitle = "Founder & Master Blender";
-        needsSave = true;
-      }
-      if (!content.founderBio) {
-        content.founderBio = "Growing up in Odisha, I watched grandma hand-pound whole spices on heavy stone mortars. Chilika Spices is my humble promise to safeguard that dying art, connect village farmers directly with food lovers, and bring honest, pure flavours to every home in India.";
-        needsSave = true;
-      }
-      if (!content.founderQuoteOdia) {
-        content.founderQuoteOdia = "ଯେଉଁ ବାସ୍ନା ଆଉ ସ୍ୱାଦ ପାରମ୍ପରିକ ହାତବଟା ମସଲାରେ ଥାଏ, ତାହା କୌଣସି ଫ୍ୟାକ୍ଟ୍ରି ମେସିନ୍‌ ଦେଇପାରିବ ନାହିଁ। ନିର୍ମଳ ମସଲା ଆଉ ଭଲପାଇବା ହିଁ ଅସଲ ସ୍ୱାଦ।";
-        needsSave = true;
-      }
-      if (!content.founderQuoteEnglish) {
-        content.founderQuoteEnglish = "The aroma and soul that comes from traditional hand-roasted and stone-ground spices can never be found in a factory machine. Pure spices and patience are the secret ingredients.";
-        needsSave = true;
-      }
-      if (!content.instagramUrl) {
-        content.instagramUrl = "https://instagram.com/chilikaspices";
-        needsSave = true;
-      }
-      if (!content.youtubeUrl) {
-        content.youtubeUrl = "https://youtube.com/@chilikaspices";
-        needsSave = true;
-      }
-      if (!content.facebookUrl) {
-        content.facebookUrl = "https://facebook.com/chilikaspices";
-        needsSave = true;
-      }
-      if (!content.announcementText) {
-        content.announcementText = "Authentic Indian spices from Odisha • Free shipping on orders above ₹499";
-        needsSave = true;
-      }
-      if (!content.socialGalleryItems || content.socialGalleryItems.length === 0) {
-        content.socialGalleryItems = [
-          {
-            image: '/images/products/turmeric.jpg',
-            caption: 'Pure sun-dried Kandhamal turmeric root grinding',
-            link: '/shop'
-          },
-          {
-            image: '/images/brand/chilika-illustration.png',
-            caption: 'Tradition meets daily cooking in Odisha homes',
-            link: '/about'
-          },
-          {
-            image: '/images/products/garam-masala-wa.jpg',
-            caption: 'Handpicked whole spices slow-roasted in iron kadai',
-            link: '/shop'
-          },
-          {
-            image: '/images/products/chilli-powder-wa.jpg',
-            caption: 'Fiery natural red chillies dried under village skies',
-            link: '/shop'
-          },
-          {
-            image: '/images/products/panch-phoron.jpg',
-            caption: 'The golden crackle of authentic panch phoron tadka',
-            link: '/shop'
-          },
-          {
-            image: '/images/products/machha-besara.jpg',
-            caption: 'Chilika mustard blend prepared for fresh coastal delicacies',
-            link: '/shop'
-          }
-        ];
-        needsSave = true;
-      }
-      if (!content.customTestimonials || content.customTestimonials.length === 0) {
-        content.customTestimonials = [
-          {
-            userName: "Ananya Mishra",
-            rating: 5,
-            comment: "The aroma of this Garam Masala reminds me of my grandmother's kitchen in Puri. Pure and chemical-free!",
-            productName: "Pure Garam Masala (Homemade)",
-            isVerified: true
-          },
-          {
-            userName: "Debashis Rout",
-            rating: 5,
-            comment: "Finest Kandhamal Turmeric. High curcumin, authentic vibrant colour, zero adulteration.",
-            productName: "Turmeric Powder (Haldi)",
-            isVerified: true
-          },
-          {
-            userName: "Rashmi Rekha Parida",
-            rating: 5,
-            comment: "The Machha Besara blend is simply mind-blowing. Authentic mustard sharpness that completes fish curry.",
-            productName: "Chilika Coastal Fish Curry Blend",
-            isVerified: true
-          }
-        ];
-        needsSave = true;
-      }
-      if (needsSave) {
-        await content.save();
-      }
+        ],
+        founderName: "Biswajit Baral",
+        founderTitle: "Founder & Master Blender",
+        founderBio: "Growing up in Odisha, I watched grandma hand-pound whole spices on heavy stone mortars. Chilika Spices is my humble promise to safeguard that dying art, connect village farmers directly with food lovers, and bring honest, pure flavours to every home in India."
+      });
     }
+
     res.json({ success: true, content });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -210,14 +79,13 @@ export const getHomepageContent = async (req, res) => {
 
 export const updateHomepageContent = async (req, res) => {
   try {
-    let content = await HomepageContent.findOne();
-    if (!content) {
-      content = new HomepageContent(req.body);
-    } else {
-      Object.assign(content, req.body);
-    }
-    await content.save();
-    res.json({ success: true, content, message: 'Homepage content updated successfully' });
+    // Atomic direct update in MongoDB Atlas without dropping deletions
+    const updated = await HomepageContent.findOneAndUpdate(
+      {},
+      { $set: req.body },
+      { new: true, upsert: true, runValidators: true }
+    );
+    res.json({ success: true, content: updated, message: 'Homepage content updated successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

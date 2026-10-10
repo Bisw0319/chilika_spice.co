@@ -1763,22 +1763,26 @@ export const AdminHomepagePage = () => {
           </div>
         )}
 
-        {/* Bottom Save Bar */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <p className="text-[11px] text-gray-500">
-            Clicking publish immediately synchronizes changes live across all devices
-          </p>
+        {/* Floating Sticky Bottom Save Bar */}
+        <div className="sticky bottom-4 z-40 flex items-center justify-between p-4 bg-white/95 backdrop-blur-md rounded-2xl border border-gray-200 shadow-2xl">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+            <p className="text-xs font-semibold text-gray-700">
+              Live Cloud Publishing Mode: Updates apply globally across all browsers
+            </p>
+          </div>
 
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center space-x-2 bg-spice-crimson hover:bg-spice-deepRed text-white px-8 py-3 rounded-2xl text-xs font-bold shadow-spice transition-all disabled:opacity-60"
+            className="flex items-center space-x-2 bg-spice-crimson hover:bg-spice-deepRed text-white px-8 py-3 rounded-2xl text-xs font-bold shadow-spice transition-all disabled:opacity-60 cursor-pointer"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            <span>{saving ? 'Publishing...' : 'Publish Website Changes'}</span>
+            <span>{saving ? 'Publishing Changes...' : 'Publish Website Changes'}</span>
           </button>
         </div>
       </form>
+
     </div>
   );
 };

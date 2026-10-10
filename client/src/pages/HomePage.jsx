@@ -43,7 +43,7 @@ export const HomePage = () => {
       <MobileCategoryPills />
 
       {/* TRUST / BRAND STRIP */}
-      <TrustStrip />
+      <TrustStrip content={homepageContent} />
 
       {/* BIG PROMOTIONAL BANNERS — PRODUCT PROMOTION SPOTLIGHT */}
       <PromoBanners content={homepageContent} />
