@@ -94,6 +94,27 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+// Ensure MongoDB connection in Serverless environments
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('[DB Middleware Error]:', err);
+    return res.status(500).json({ success: false, message: 'Database connection error' });
+  }
+});
+
+// Root Health Check Route
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    brand: 'Chilika Spices API',
+    tagline: 'From village to your kitchen',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
@@ -152,7 +173,6 @@ app.use('/api/*', (req, res) => {
 const startServer = async () => {
   try {
     await connectDB();
-    await seedDatabase();
 
     app.listen(PORT, () => {
       console.log(`=======================================================`);
@@ -169,4 +189,11 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Export app for serverless platforms like Vercel
+export default app;
+
+// In standalone server mode, start the HTTP listener
+if (!process.env.VERCEL) {
+  startServer();
+}
+
